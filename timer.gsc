@@ -41,8 +41,8 @@ init()
             break;
 
         case "zm_highrise":
-            if(solo)   level.split_list = array("highrise_symbols", "highrise_perks");
-            else       level.split_list = array("highrise_symbols", "highrise_perks");
+            if(solo)   level.split_list = array("highrise_symbols", "balls_picked_up_sliquified", "highrise_perks");
+            else       level.split_list = array("highrise_symbols", "balls_picked_up_sliquified", "highrise_perks");
             break;
 
         case "zm_prison":
@@ -52,7 +52,7 @@ init()
             break;
 
         case "zm_buried":
-            level.split_list = strtok("cipher|sharpshooter", "|");
+            level.split_list = strtok("cipher|time_travel|sharpshooter", "|");
             break;
 
         case "zm_tomb":
@@ -270,6 +270,28 @@ wait_split(split)
             flag_wait( "sq_atd_drg_puzzle_complete" );
             break;
 
+        case "balls_picked_up_sliquified":
+            split = false;
+            while(!split)
+            {
+                if( flag( "ssp1_ball0_complete" ) && flag( "ssp1_ball1_complete" ) )
+                {
+                    split = true;
+                    level.eet_side = "richtofen";
+                    continue;
+                }
+
+                if( flag( "sq_ball_picked_up" ) )
+                {
+                    split = true;
+                    level.eet_side = "maxis";
+                    continue;
+                }
+
+                wait 0.05;
+            }
+            break;
+
         case "highrise_perks":
             level waittill( "sq_fireball_hit_player" );
             break;
@@ -319,7 +341,7 @@ wait_split(split)
             break;
 
         case "time_travel":
-            //while( !flag("sq_tpo_special_round_active") && !flag("sq_wisp_saved_with_time_bomb") ) wait 0.05;
+            while( !flag("sq_tpo_special_round_active") && !flag("sq_wisp_saved_with_time_bomb") ) wait 0.05;
             break;
 
         case "sharpshooter":
@@ -380,6 +402,11 @@ set_label(elem, split_name)
 
         //Die Rise
         case "highrise_symbols": elem.label = &"^3Symbols ^7"; break;
+        case "balls_picked_up_sliquified": elem.label = &"^3Balls picked up/sliquified ^7"; break;
+        case "balls_picked_up_sliquified_maxis": elem.label = &"^3Ball picked up ^7"; break;
+        case "balls_picked_up_sliquified_richtofen": elem.label = &"^3Balls sliquified ^7"; break;
+        case "highrise_perks_maxis":
+        case "highrise_perks_richtofen":
         case "highrise_perks": elem.label = &"^3High Maintenance ^7"; break;
 
         //Mob of the Dead
